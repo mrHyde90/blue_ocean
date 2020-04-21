@@ -15,7 +15,7 @@ pipeline {
                   sh 'tidy -q -e *.html'
               }
          }  
-         stage('Build2.0') {
+         stage('Build2.1') {
              steps {
                  sh 'echo "Hello World DO i wanna know"'
                  sh '''
