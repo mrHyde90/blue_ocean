@@ -1,7 +1,7 @@
 pipeline {
      agent any
      stages {
-         stage('Build 2') {
+         stage('Build') {
              steps {
                  sh 'echo "Hello World and U crazy little programmer"'
                  sh '''
@@ -14,18 +14,41 @@ pipeline {
               steps {
                   sh 'tidy -q -e *.html'
               }
-         }
-         stage('Security Scan') {
-              steps { 
-                 aquaMicroscanner imageName: 'alpine:latest', notCompleted: 'exit 1', onDisallowed: 'fail'
-              }
-         }         
-         stage('Upload to AWS') {
+         }  
+         stage('Deployment message') {
+             when {
+                branch 'deployment'
+            }
               steps {
-                  withAWS(region:'us-east-2',credentials:'aws-static') {
-                  sh 'echo "Uploading content with AWS creds"'
-                      s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'static-jenkins-pipeline')
-                  }
+                  sh 'echo "Deployment branch"'
+                 sh '''
+                     echo "Multiline shell steps works too"
+                     ls -lah
+                 '''
+              }
+         }
+         stage('Staging message') {
+             when {
+                branch 'staging'
+            }
+              steps {
+                  sh 'echo "Staging branch"'
+                 sh '''
+                     echo "Multiline shell steps works too"
+                     ls -lah
+                 '''
+              }
+         }
+         stage('Development message') {
+             when {
+                branch 'development'
+            }
+              steps {
+                  sh 'echo "Development branch"'
+                 sh '''
+                     echo "Multiline shell steps works too"
+                     ls -lah
+                 '''
               }
          }
      }
