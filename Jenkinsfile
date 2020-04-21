@@ -15,6 +15,15 @@ pipeline {
                   sh 'tidy -q -e *.html'
               }
          }  
+         stage('Build2.0') {
+             steps {
+                 sh 'echo "Hello World DO i wanna know"'
+                 sh '''
+                     echo "Multiline shell steps works too"
+                     ls -lah
+                 '''
+             }
+         }
          stage('Deployment message') {
              when {
                 branch 'deployment'
